@@ -1,1 +1,1 @@
-beta still in testing; proceed w caution
+idk man proceed at ur own risk lol
