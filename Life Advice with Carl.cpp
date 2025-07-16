@@ -20,6 +20,7 @@ int main()
 		"idk bro maybe go touch some grass",
 		"welp.",
 		"idk have you tried putting it in some rice?",
+		"just drink some hot water.",
 		"Carl thinks you should get a therapist.",
 		"okay but have you tried not thinking about it?",
 		"meh. that's a boring problem. suck it up.",
