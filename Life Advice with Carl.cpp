@@ -24,7 +24,7 @@ int main()
 		"Carl thinks you should get a therapist.",
 		"okay but have you tried not thinking about it?",
 		"meh. that's a boring problem. suck it up.",
-		"doesn't sound like a problem to Carl. Carl actually thinks that's badass.",
+		"doesn't sound like a problem to Carl. Carl actually thinks that's badass."
 	};
 
 	srand(time(0));
