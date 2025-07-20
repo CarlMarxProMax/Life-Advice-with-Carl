@@ -1,0 +1,148 @@
+// Life Advice with Carl.cpp ------ beta version
+
+#include <iostream>
+#include <vector>
+#include <cstdlib> //for rand()
+#include <ctime> //for time()
+#include <string> 
+#include <algorithm> //for transform()
+#include <map>
+#include <set>
+
+using namespace std;
+
+//convert string to lowercase
+string toLower(const string& str) {
+	string lowerStr = str;
+	transform(lowerStr.begin(), lowerStr.end(), lowerStr.begin(), ::tolower);
+	return lowerStr;
+}
+
+//keyword groups with synonym + response
+map<string, pair<vector<string>, vector<string>>> keywordGroups = {
+	{"homework", {
+		{"homework", "hw", "assignment"},
+		{
+		 "just drop out atp",
+		 "Ctrl + C, Ctrl + V. You're welcome.",
+		 "dawg why you asking me i aint chat gpt.  i'm just Carl.",
+		 "... \ni think McDonald's is hiring."
+		}
+	}},
+
+	{"love", {
+		{"crush", "girlfriend", "boyfriend", "gf", "bf", "ex"},
+		{
+		 "They're mid. Focus on crypto.",
+		 "Do not the straights. Do not the gays. Just do not.",
+		 "Love is temporary but your credit score is forever. Love is a distraction, my child."
+		}
+	}},
+
+	{"sad", {
+		{"sad", "depressed"},
+		{
+			"just don't.",
+			"skill issue man",
+			"try playing some Roblox"
+		}
+	}}
+};
+
+vector <string> catchAll = {
+		"sounds like skill issue ngl",
+		"erm what the sigma",
+		"dawg i ain't chat gpt i'm just carl",
+		"Carl thinks that's a problem for tomorrow",
+		"...",
+		"Carl is secretly judgeing you rn",
+		"idk bro maybe go touch some grass",
+		"welp.",
+		"idk have you tried putting it in some rice?",
+		"just drink some hot water.",
+		"Carl thinks you should get a therapist.",
+		"okay but have you tried not thinking about it?",
+		"meh. that's a boring problem. suck it up.",
+		"doesn't sound like a problem to Carl. Carl actually thinks that's badass."
+}; 
+
+string getRandomResponse(const vector<string>& responses) {
+	return responses[rand() % responses.size()];
+}
+
+pair<vector<string>, set<string>> getTriggeredKeywords(const string& input) {
+	vector<string> canonicalKeywords;
+	set<string> userTerms;
+	string lowerInput = toLower(input);
+
+	for (const auto& group : keywordGroups) {
+		for (const string& synonym : group.second.first) {
+			if (lowerInput.find(synonym) != string::npos) {
+				canonicalKeywords.push_back(group.first);
+				userTerms.insert(synonym);
+				break;
+			}
+		}
+	}
+	return {canonicalKeywords, userTerms};
+}
+
+string formatKeywordList(const set<string>& keywords) {
+	if (keywords.empty()) return " ";
+	vector<string> keywordList(keywords.begin(), keywords.end());
+	if (keywordList.size() == 1) return keywordList[0];
+
+	string result;
+	for (size_t i = 0; i < keywordList.size() - 1; ++i) {
+		result += keywordList[i] + (i < keywordList.size() - 2 ? ", " : "");
+	}
+	return result + " and " + keywordList.back();
+}
+
+int main() {
+
+	srand(time(0));
+
+	cout << "Life Advice with Carl \n";
+	cout << "--------------------- \n";
+	cout << "input 'thank you Carl' to exit \n";
+	cout << "--------------------- \n";
+	cout << "\n";
+	cout << "Carl: tell Carl your problems, child \n";
+
+	while (true) {
+		cout << "\nYou: ";
+		string input;
+		getline(cin, input);
+
+		if (toLower(input) == "thank you carl") break;
+
+		pair<vector<string>, set<string>> result = getTriggeredKeywords(input);
+		vector<string>& canonicalKeywords = result.first;
+		set<string>& userTerms = result.second;
+		string response;
+
+		if (!canonicalKeywords.empty()) {
+			vector<string> possibleResponses;
+			for (const string& keyword : canonicalKeywords) {
+				possibleResponses.insert(
+					end(possibleResponses),
+					keywordGroups[keyword].second.begin(),
+					keywordGroups[keyword].second.end()
+				);
+			}
+			response = getRandomResponse(possibleResponses);
+		}
+		else {
+			response = getRandomResponse(catchAll);
+		}
+
+		if (userTerms.size() > 1) {
+			cout << "Carl: You mentioned " << formatKeywordList(userTerms) << ". Pick a problem dawg." << endl;
+		}
+		else {
+			cout << "Carl: " << response << endl;
+		}
+	}
+	return 0;
+}
